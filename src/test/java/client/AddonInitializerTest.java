@@ -22,7 +22,7 @@ public class AddonInitializerTest {
     void getExistingAddonsTest(@TempDir Path tempDir) {
 
         Path classicAddonPath = Paths.get(tempDir.toString(), "_classic_/interface/addOns");
-        final int numberOfAddons = 10;
+        final int numberOfAddons = 5;
         Path[] expected = new Path[numberOfAddons];
 
         try {

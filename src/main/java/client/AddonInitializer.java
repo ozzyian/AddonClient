@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 // import java.nio.file.Paths;
@@ -33,13 +32,10 @@ public class AddonInitializer {
         Path addonPath = classicMode ? Paths.get(wowPath.toString(), CLASSIC_PATH)
                 : Paths.get(wowPath.toString(), RETAIL_PATH);
 
-        List<Path> addons;
+
         try (Stream<Path> files = Files.list(addonPath)) {
-            addons = files.collect(Collectors.toList());
+            return files.collect(Collectors.toList()).toArray(new Path[0]);
         }
-
-
-        return addons.toArray(new Path[0]);
 
     }
 
