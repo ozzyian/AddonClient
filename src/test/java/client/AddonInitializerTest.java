@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -22,7 +23,7 @@ public class AddonInitializerTest {
     void getExistingAddonsTest(@TempDir Path tempDir) {
 
         Path classicAddonPath = Paths.get(tempDir.toString(), "_classic_/interface/addOns");
-        final int numberOfAddons = 10;
+        final int numberOfAddons = 5;
         Path[] expected = new Path[numberOfAddons];
 
         try {
@@ -36,8 +37,17 @@ public class AddonInitializerTest {
             Path[] actual;
             actual = aI.getExistingAddons();
 
+            for (int i = 0; i < actual.length; i++) {
+                System.out.println(i + ": " + actual[i]);
+            }
+
+            for (int i = 0; i < expected.length; i++) {
+                System.out.println(i + ": " + expected[i]);
+            }
             assertNotNull(actual);
             assertNotNull(expected);
+            Arrays.sort(expected);
+            Arrays.sort(actual);
             assertArrayEquals(expected, actual);
 
         } catch (IOException e) {
