@@ -32,9 +32,9 @@ public class AddonInitializer {
         final Path addonPath = classicMode ? Paths.get(wowPath.toString(), CLASSIC_PATH)
                 : Paths.get(wowPath.toString(), RETAIL_PATH);
 
-
         try (Stream<Path> files = Files.list(addonPath)) {
-            return files.collect(Collectors.toList()).toArray(new Path[0]);
+            return files.collect(Collectors.toList())
+                        .toArray(new Path[0]);
         }
 
     }
