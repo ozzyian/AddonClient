@@ -22,7 +22,7 @@ public class AddonInitializerTest {
      * Test for getExistingAddonsMethod.
      */
     @Test
-    void getExistingAddonsTest(@TempDir Path tempDir) {
+    void getExistingAddonsClassicTest(@TempDir Path tempDir) {
 
         Path classicAddonPath = Paths.get(tempDir.toString(), "_classic_/interface/addOns");
         final int numberOfAddons = 5;
@@ -39,13 +39,6 @@ public class AddonInitializerTest {
             Path[] actual;
             actual = aI.getExistingAddons();
 
-            for (int i = 0; i < actual.length; i++) {
-                System.out.println(i + ": " + actual[i]);
-            }
-
-            for (int i = 0; i < expected.length; i++) {
-                System.out.println(i + ": " + expected[i]);
-            }
             assertNotNull(actual);
             assertNotNull(expected);
             Arrays.sort(expected);
