@@ -39,12 +39,21 @@ public class AddonInitializerTest {
             Path[] actual;
             actual = aI.getExistingAddons();
 
+            for (int i = 0; i < actual.length; i++) {
+                System.out.println(i + ": " + actual[i]);
+            }
+
+            for (int i = 0; i < expected.length; i++) {
+                System.out.println(i + ": " + expected[i]);
+            }
             assertNotNull(actual);
             assertNotNull(expected);
             Arrays.sort(expected);
             Arrays.sort(actual);
             assertArrayEquals(expected, actual,
                     "Arrays should be of equal lenght and same elements");
+
+
 
         } catch (IOException e) {
             e.printStackTrace();
