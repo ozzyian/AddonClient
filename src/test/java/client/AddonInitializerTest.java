@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 // import java.nio.file.Paths;
 /**
@@ -37,18 +39,12 @@ public class AddonInitializerTest {
             Path[] actual;
             actual = aI.getExistingAddons();
 
-            for (int i = 0; i < actual.length; i++) {
-                System.out.println(i + ": " + actual[i]);
-            }
-
-            for (int i = 0; i < expected.length; i++) {
-                System.out.println(i + ": " + expected[i]);
-            }
             assertNotNull(actual);
             assertNotNull(expected);
             Arrays.sort(expected);
             Arrays.sort(actual);
-            assertArrayEquals(expected, actual);
+            assertArrayEquals(expected, actual,
+                    "Arrays should be of equal lenght and same elements");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -56,7 +52,40 @@ public class AddonInitializerTest {
 
     }
 
-    void validatePathTest() {
+    /**
+     * Test for correct folder choice.
+     */
+    @Test
+    void validatePathCorrectFolderTest(@TempDir Path tempDir) {
 
+        try {
+
+            Files.createFile(tempDir.resolve("World of Warcraft Launcher.exe"));
+            AddonInitializer aiRetail = new AddonInitializer(tempDir, false);
+            AddonInitializer aiClassic = new AddonInitializer(tempDir, true);
+            assertTrue(aiRetail.validatePath(), "File should exist inside directory");
+            assertTrue(aiClassic.validatePath(), "File should exist inside directory");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Test for wrong folder choice.
+     */
+    @Test
+    void validatePathWrongFolderTest(@TempDir Path tempDir) {
+        try {
+
+            Files.createFile(tempDir.resolve("World of Warcraft Launcher"));
+            AddonInitializer aiRetail = new AddonInitializer(tempDir, false);
+            AddonInitializer aiClassic = new AddonInitializer(tempDir, true);
+            assertFalse(aiRetail.validatePath(), "Should not be true for wrong file");
+            assertFalse(aiClassic.validatePath(), "Should not be true for wrong file");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
