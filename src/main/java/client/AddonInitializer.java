@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 // import java.nio.file.Paths;
@@ -16,10 +15,10 @@ public class AddonInitializer {
 
     private static final String CLASSIC_PATH = "_classic_/interface/addOns";
     private static final String RETAIL_PATH = "interface/addOns";
-    private Path wowPath;
-    private boolean classicMode;
+    private final Path wowPath;
+    private final boolean classicMode;
 
-    public AddonInitializer(Path path, boolean classicMode) {
+    public AddonInitializer(final Path path, final boolean classicMode) {
         wowPath = path;
         this.classicMode = classicMode;
     }
@@ -30,28 +29,25 @@ public class AddonInitializer {
      */
     public Path[] getExistingAddons() throws IOException {
 
-        Path addonPath = classicMode ? Paths.get(wowPath.toString(), CLASSIC_PATH)
+        final Path addonPath = classicMode ? Paths.get(wowPath.toString(), CLASSIC_PATH)
                 : Paths.get(wowPath.toString(), RETAIL_PATH);
 
-        List<Path> addons;
+
         try (Stream<Path> files = Files.list(addonPath)) {
-            addons = files.collect(Collectors.toList());
+            return files.collect(Collectors.toList()).toArray(new Path[0]);
         }
-
-
-        return addons.toArray(new Path[0]);
 
     }
 
     /**
      *
      * @return true of false if wow.exe exist in dir.
+     * @throws IOException
      */
-    public boolean validatePath() {
+    public boolean validatePath() throws IOException {
 
+        final Path exePath = Paths.get(wowPath.toString() + "/World of Warcraft Launcher.exe");
+        return Files.exists(exePath);
 
-
-        return false;
     }
-
 }
