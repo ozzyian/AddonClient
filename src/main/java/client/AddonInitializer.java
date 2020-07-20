@@ -15,10 +15,10 @@ public class AddonInitializer {
 
     private static final String CLASSIC_PATH = "_classic_/interface/addOns";
     private static final String RETAIL_PATH = "interface/addOns";
-    private Path wowPath;
-    private boolean classicMode;
+    private final Path wowPath;
+    private final boolean classicMode;
 
-    public AddonInitializer(Path path, boolean classicMode) {
+    public AddonInitializer(final Path path, final boolean classicMode) {
         wowPath = path;
         this.classicMode = classicMode;
     }
@@ -29,7 +29,7 @@ public class AddonInitializer {
      */
     public Path[] getExistingAddons() throws IOException {
 
-        Path addonPath = classicMode ? Paths.get(wowPath.toString(), CLASSIC_PATH)
+        final Path addonPath = classicMode ? Paths.get(wowPath.toString(), CLASSIC_PATH)
                 : Paths.get(wowPath.toString(), RETAIL_PATH);
 
 
@@ -42,12 +42,12 @@ public class AddonInitializer {
     /**
      *
      * @return true of false if wow.exe exist in dir.
+     * @throws IOException
      */
-    public boolean validatePath() {
+    public boolean validatePath() throws IOException {
 
+        final Path exePath = Paths.get(wowPath.toString() + "/World of Warcraft Launcher.exe");
+        return Files.exists(exePath);
 
-
-        return false;
     }
-
 }
