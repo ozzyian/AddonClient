@@ -18,27 +18,39 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Test class for AddonInitializer.
  */
 public class AddonInitializerTest {
+
+
     /**
-     * Test for getExistingAddonsMethod.
+     * @param tempDir path where files should be generated.
+     * @return Array with the generated paths.
+     * @throws IOException
+     */
+    Path[] generateTempFiles(Path tempDir) throws IOException {
+        final int numberOfAddons = 5;
+        Path[] expected = new Path[numberOfAddons];
+
+
+        Files.createDirectories(tempDir);
+        for (int i = 0; i < numberOfAddons; i++) {
+            expected[i] = Files.createFile(tempDir.resolve("file" + i));
+        }
+
+        return expected;
+
+    }
+
+    /**
+     * @param tempDir tempDir for testing purposes.
      */
     @Test
     void getExistingAddonsClassicTest(@TempDir Path tempDir) {
 
         Path classicAddonPath = Paths.get(tempDir.toString(), "_classic_/interface/addOns");
-        final int numberOfAddons = 5;
-        Path[] expected = new Path[numberOfAddons];
 
         try {
-
-            Files.createDirectories(classicAddonPath);
-            for (int i = 0; i < numberOfAddons; i++) {
-                expected[i] = Files.createFile(classicAddonPath.resolve("file" + i));
-            }
-
             AddonInitializer aI = new AddonInitializer(tempDir, true);
-            Path[] actual;
-            actual = aI.getExistingAddons();
-
+            Path[] expected = generateTempFiles(classicAddonPath);
+            Path[] actual = aI.getExistingAddons();
             assertNotNull(actual);
             assertNotNull(expected);
             Arrays.sort(expected);
@@ -52,6 +64,29 @@ public class AddonInitializerTest {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * @param tempDir tempDir for testing purposes.
+     */
+    @Test
+    void getExistingAddonsRetailTest(@TempDir Path tempDir) {
+
+        Path retailAddonPath = Paths.get(tempDir.toString(), "interface/addOns");
+        try {
+            AddonInitializer aI = new AddonInitializer(tempDir, false);
+            Path[] expected = generateTempFiles(retailAddonPath);
+            Path[] actual = aI.getExistingAddons();
+
+            assertNotNull(actual);
+            assertNotNull(expected);
+            Arrays.sort(expected);
+            Arrays.sort(actual);
+            assertArrayEquals(expected, actual,
+                    "Arrays should be of equal lenght and same elements");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
