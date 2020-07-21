@@ -89,11 +89,12 @@ public class AddonInitializer {
         while (line != null) {
             line = reader.readLine();
             if (line.contains("X-Curse-Project-ID")) {
+                reader.close();
                 return line.replaceAll("[^0-9]", "")
                            .trim();
             }
         }
-
+        reader.close();
         throw new UnsupportedAddonException("Addon does not contain a curse ID");
     }
 
