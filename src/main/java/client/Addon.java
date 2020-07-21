@@ -37,7 +37,7 @@ public class Addon {
 
     @Override
     public String toString() {
-        return "Addon [id=" + id + ", latestFiles=" + latestFiles + ", name=" + name + "]";
+        return "Addon [" + name + "]";
     }
 
 }

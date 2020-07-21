@@ -30,7 +30,7 @@ public class CurseAPI {
      * @throws IOException
      * @throws InterruptedException
      */
-    public Addon getAddonInfo(String id) throws IOException, InterruptedException {
+    public Addon getAddon(String id) throws IOException, InterruptedException {
 
         HttpRequest request = HttpRequest.newBuilder()
                                          .GET()
