@@ -88,7 +88,7 @@ public class AddonInitializer {
         String line = "";
         while (line != null) {
             line = reader.readLine();
-            if (line.contains("X-Curse-Project-ID")) {
+            if (line != null && line.contains("X-Curse-Project-ID")) {
                 reader.close();
                 return line.replaceAll("[^0-9]", "")
                            .trim();
