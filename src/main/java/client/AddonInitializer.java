@@ -47,12 +47,12 @@ public class AddonInitializer {
      * Evaluates if existing addOn can be imported.
      *
      * @param addonPath the path to the addOn.
-     * @return The result of querying the curse API for said Addon.
+     * @return true for 1 existing .toc file.
      * @throws IOException
      * @throws UnsupportedAddonException
      * @throws InterruptedException
      */
-    public boolean evaluateExistingAddon(Path addonPath) throws IOException, InterruptedException {
+    public boolean evaluateTocFile(Path addonPath) throws IOException, InterruptedException {
 
         List<Path> tocPath;
         try (Stream<Path> files = Files.list(addonPath)) {

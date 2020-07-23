@@ -201,13 +201,13 @@ public class AddonInitializerTest {
     }
 
     @Test
-    void evaluateExistingAddonTest(@TempDir Path tempDir) {
+    void getTocFilePathTest(@TempDir Path tempDir) {
         try {
             AddonInitializer aInitializer = new AddonInitializer(tempDir, false);
-            Path tempToc = generateTempTocFile(tempDir, "## X-Curse-Proje-ID: 3358");
-            assertTrue(aInitializer.evaluateExistingAddon(tempDir));
+            Path tempToc = generateTempTocFile(tempDir, "## X-Curse-Project-ID: 3358");
+            assertTrue(aInitializer.evaluateTocFile(tempDir));
             Files.delete(tempToc);
-            assertFalse(aInitializer.evaluateExistingAddon(tempDir));
+            assertFalse(aInitializer.evaluateTocFile(tempDir));
         } catch (IOException e) {
             fail("IOException was thrown.");
             e.printStackTrace();
