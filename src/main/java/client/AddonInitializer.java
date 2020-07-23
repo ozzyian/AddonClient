@@ -1,12 +1,14 @@
 package client;
 
+import client.exceptions.UnsupportedAddonException;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-// import java.nio.file.Paths;
 
 /**
  * Handles the initialization of already existing addons.
@@ -24,24 +26,75 @@ public class AddonInitializer {
     }
 
     /**
+     * Finds all folders of addon folder and returns them.
+     *
      * @return All path objects representing addon folders.
      * @throws IOException
      */
-    public Path[] getExistingAddons() throws IOException {
+    public Path[] getExistingAddonsPaths() throws IOException {
 
         final Path addonPath = classicMode ? Paths.get(wowPath.toString(), CLASSIC_PATH)
                 : Paths.get(wowPath.toString(), RETAIL_PATH);
 
-
         try (Stream<Path> files = Files.list(addonPath)) {
-            return files.collect(Collectors.toList()).toArray(new Path[0]);
+            return files.collect(Collectors.toList())
+                        .toArray(new Path[0]);
         }
 
     }
 
     /**
+     * Evaluates if existing addOn can be imported.
      *
-     * @return true of false if wow.exe exist in dir.
+     * @param addonPath the path to the addOn.
+     * @return true for 1 existing .toc file.
+     * @throws IOException
+     * @throws UnsupportedAddonException
+     * @throws InterruptedException
+     */
+    public boolean evaluateTocFile(Path addonPath) throws IOException, InterruptedException {
+
+        List<Path> tocPath;
+        try (Stream<Path> files = Files.list(addonPath)) {
+            tocPath = files.filter(path -> path.toString()
+                                               .endsWith(".toc"))
+                           .limit(2)
+                           .collect(Collectors.toList());
+        }
+
+        return tocPath.size() == 1;
+
+    }
+
+    /**
+     * Tries to find the curse ID inside the .toc file.
+     *
+     * @param file the path to the .toc file.
+     * @return the extracted id.
+     * @throws IOException
+     * @throws UnsupportedAddonException
+     */
+    public String getCurseId(Path file) throws IOException, UnsupportedAddonException {
+
+        // BufferedReader reader = Files.newBufferedReader(file);
+
+        String line = "";
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("X-Curse-Project-ID")) {
+                    return line.replaceAll("[^0-9]", "")
+                               .trim();
+                }
+            }
+        }
+
+        throw new UnsupportedAddonException("Addon does not contain a curse ID");
+    }
+
+    /**
+     * Validates a selected path.
+     *
+     * @return true or false if wow.exe exist in dir.
      * @throws IOException
      */
     public boolean validatePath() throws IOException {
@@ -50,4 +103,5 @@ public class AddonInitializer {
         return Files.exists(exePath);
 
     }
+
 }
