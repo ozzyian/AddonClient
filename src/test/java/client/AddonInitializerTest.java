@@ -182,7 +182,7 @@ public class AddonInitializerTest {
     }
 
     @Test
-    void getCurseIdTestNotSupportedException(@TempDir Path tempDir) {
+    void getCurseIdNotSupportedExceptionTest(@TempDir Path tempDir) {
         try {
             String faultyLine = "## X-Curse-Proje-ID: 3358";
             Path tocFileWithoutId;

@@ -76,18 +76,18 @@ public class AddonInitializer {
      */
     public String getCurseId(Path file) throws IOException, UnsupportedAddonException {
 
-        BufferedReader reader = Files.newBufferedReader(file);
+        // BufferedReader reader = Files.newBufferedReader(file);
 
         String line = "";
-        while (line != null) {
-            line = reader.readLine();
-            if (line != null && line.contains("X-Curse-Project-ID")) {
-                reader.close();
-                return line.replaceAll("[^0-9]", "")
-                           .trim();
+        try (BufferedReader reader = Files.newBufferedReader(file)) {
+            while ((line = reader.readLine()) != null) {
+                if (line.contains("X-Curse-Project-ID")) {
+                    return line.replaceAll("[^0-9]", "")
+                               .trim();
+                }
             }
         }
-        reader.close();
+
         throw new UnsupportedAddonException("Addon does not contain a curse ID");
     }
 
