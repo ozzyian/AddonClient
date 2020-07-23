@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /**
- * Test class for AddonInitializer.
+ * Test class for AddonInitializer and contains VERY SIMPLE TESTING, needs more.
  */
 public class AddonInitializerTest {
 
@@ -86,7 +86,7 @@ public class AddonInitializerTest {
         try {
             AddonInitializer aI = new AddonInitializer(tempDir, true);
             Path[] expected = generateTempFiles(classicAddonPath);
-            Path[] actual = aI.getExistingAddons();
+            Path[] actual = aI.getExistingAddonsPaths();
             assertNotNull(actual, "Actual was null.");
             assertNotNull(expected, "Expected was null.");
             Arrays.sort(expected);
@@ -110,7 +110,7 @@ public class AddonInitializerTest {
         try {
             AddonInitializer aI = new AddonInitializer(tempDir, false);
             Path[] expected = generateTempFiles(retailAddonPath);
-            Path[] actual = aI.getExistingAddons();
+            Path[] actual = aI.getExistingAddonsPaths();
 
             assertNotNull(actual);
             assertNotNull(expected);
@@ -118,6 +118,7 @@ public class AddonInitializerTest {
             Arrays.sort(actual);
             assertArrayEquals(expected, actual, "Arrays should be of equal lenght and same elements");
         } catch (IOException e) {
+            fail("IOException was thrown.");
             e.printStackTrace();
         }
     }
@@ -174,14 +175,14 @@ public class AddonInitializerTest {
 
             assertEquals("3358", aInitializer.getCurseId(tocFile));
         } catch (IOException | UnsupportedAddonException | NullPointerException e) {
-            fail("Exception should not be thrown...");
+            fail("IOException was thrown.");
             e.printStackTrace();
         }
 
     }
 
     @Test
-    void getCurseIdTestNotSupported(@TempDir Path tempDir) {
+    void getCurseIdTestNotSupportedException(@TempDir Path tempDir) {
         try {
             String faultyLine = "## X-Curse-Proje-ID: 3358";
             Path tocFileWithoutId;
@@ -194,7 +195,24 @@ public class AddonInitializerTest {
             });
 
         } catch (IOException e) {
-            fail("Should not throw an IOException");
+            fail("IOException was thrown.");
+            e.printStackTrace();
+        }
+    }
+
+    @Test
+    void evaluateExistingAddonTest(@TempDir Path tempDir) {
+        try {
+            AddonInitializer aInitializer = new AddonInitializer(tempDir, false);
+            Path tempToc = generateTempTocFile(tempDir, "## X-Curse-Proje-ID: 3358");
+            assertTrue(aInitializer.evaluateExistingAddon(tempDir));
+            Files.delete(tempToc);
+            assertFalse(aInitializer.evaluateExistingAddon(tempDir));
+        } catch (IOException e) {
+            fail("IOException was thrown.");
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            fail("InterruptedException was thrown.");
             e.printStackTrace();
         }
     }
