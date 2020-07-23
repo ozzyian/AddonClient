@@ -31,7 +31,7 @@ public class AddonInitializer {
      * @return All path objects representing addon folders.
      * @throws IOException
      */
-    public Path[] getExistingAddons() throws IOException {
+    public Path[] getExistingAddonsPaths() throws IOException {
 
         final Path addonPath = classicMode ? Paths.get(wowPath.toString(), CLASSIC_PATH)
                 : Paths.get(wowPath.toString(), RETAIL_PATH);
@@ -52,8 +52,7 @@ public class AddonInitializer {
      * @throws UnsupportedAddonException
      * @throws InterruptedException
      */
-    public Addon evaluateExistingAddon(Path addonPath)
-            throws IOException, UnsupportedAddonException, InterruptedException {
+    public boolean evaluateExistingAddon(Path addonPath) throws IOException, InterruptedException {
 
         List<Path> tocPath;
         try (Stream<Path> files = Files.list(addonPath)) {
@@ -63,13 +62,7 @@ public class AddonInitializer {
                            .collect(Collectors.toList());
         }
 
-        if (tocPath.size() == 1) {
-            String id = getCurseId(tocPath.get(0));
-            CurseAPI api = new CurseAPI();
-            return api.getAddon(id);
-        } else {
-            throw new UnsupportedAddonException("Does not support addOns with more or less than one .toc file");
-        }
+        return tocPath.size() == 1;
 
     }
 
@@ -77,7 +70,7 @@ public class AddonInitializer {
      * Tries to find the curse ID inside the .toc file.
      *
      * @param file the path to the .toc file.
-     * @return the extracted id as an int.
+     * @return the extracted id.
      * @throws IOException
      * @throws UnsupportedAddonException
      */
@@ -101,7 +94,7 @@ public class AddonInitializer {
     /**
      * Validates a selected path.
      *
-     * @return true of false if wow.exe exist in dir.
+     * @return true or false if wow.exe exist in dir.
      * @throws IOException
      */
     public boolean validatePath() throws IOException {
