@@ -1,5 +1,6 @@
 package client;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,6 +34,16 @@ public class Addon {
 
     public void setLatestFiles(List<LatestFile> latestFiles) {
         this.latestFiles = latestFiles;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public LocalDateTime getLatestFileDate() {
+
+        String latestFileString = latestFiles.get(latestFiles.size() - 1).getFileDate();
+        return LocalDateTime.parse(latestFileString.replace("Z", ""));
     }
 
     @Override
