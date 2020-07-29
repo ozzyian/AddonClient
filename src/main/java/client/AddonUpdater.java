@@ -24,7 +24,7 @@ public class AddonUpdater {
     public boolean isUpToDate(Addon check) throws IOException, InterruptedException {
 
         LocalDateTime currentFileDate = check.getLatestFileDate();
-        LocalDateTime otherFileDate = curseAPI.getAddon(check.getId() + "").getLatestFileDate();
+        LocalDateTime otherFileDate = curseAPI.getAddonData(check.getId() + "").getLatestFileDate();
 
         return currentFileDate.isEqual(otherFileDate);
     }
@@ -39,7 +39,7 @@ public class AddonUpdater {
      */
     public Addon updateAddon(Addon toUpdate) throws IOException, InterruptedException {
 
-        Addon updated = curseAPI.getAddon(toUpdate.getId()+"");
+        Addon updated = curseAPI.getAddonData(toUpdate.getId()+"");
 
         return updated;
     }
