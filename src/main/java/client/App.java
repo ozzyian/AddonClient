@@ -1,7 +1,5 @@
 package client;
 
-import java.io.IOException;
-
 /**
  * Hello world!
  */
