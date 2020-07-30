@@ -1,5 +1,6 @@
 package client;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -35,9 +36,23 @@ public class Addon {
         this.latestFiles = latestFiles;
     }
 
+    /**
+     *
+     * @return
+     */
+    public LocalDateTime getLatestFileDate() {
+
+        String latestFileString = latestFiles.get(latestFiles.size() - 1).getFileDate();
+        return LocalDateTime.parse(latestFileString.replace("Z", ""));
+    }
+
     @Override
     public String toString() {
         return "Addon [" + name + "]";
+    }
+
+    public int compareTo(Addon other) {
+        return this.id < other.id ? -1 : 1;
     }
 
 }
