@@ -1,7 +1,5 @@
 package client;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -10,7 +8,6 @@ import java.net.http.HttpResponse;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionException;
 import java.util.stream.Collectors;
 
 /**
@@ -56,28 +53,6 @@ public class CurseAPI {
                 .collect(Collectors.toList());
 
         return requests;
-    }
-
-    /**
-     * Custom mapper class to map JSON string to Addon object.
-     */
-    class AddonMapper extends com.fasterxml.jackson.databind.ObjectMapper {
-
-        /**
-         * Matches the contents of a JSON string to an addon object.
-         *
-         * @param content The JSON string.
-         * @return The resulting addon object from the JSON string.
-         */
-        Addon readValue(String content) {
-            try {
-                this.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-                return this.readValue(content, new TypeReference<Addon>() {
-                });
-            } catch (IOException ioe) {
-                throw new CompletionException(ioe);
-            }
-        }
     }
 
 }
