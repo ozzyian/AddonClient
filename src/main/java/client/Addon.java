@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Holds the necessary data for the addon.
  */
-public class Addon {
+public class Addon implements Comparable<Addon>{
 
     private int id;
     private String name;
@@ -52,7 +52,7 @@ public class Addon {
     }
 
     public int compareTo(Addon other) {
-        return this.id < other.id ? -1 : 1;
+        return this.name.compareTo(other.name);
     }
 
 }
