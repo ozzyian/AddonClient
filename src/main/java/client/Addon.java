@@ -51,4 +51,8 @@ public class Addon {
         return "Addon [" + name + "]";
     }
 
+    public int compareTo(Addon other) {
+        return this.id < other.id ? -1 : 1;
+    }
+
 }
